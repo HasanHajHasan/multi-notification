@@ -1,78 +1,99 @@
-name: 'Multi-Channel Notifications'
-description: 'Send notifications to Slack, Email, Telegram, and WhatsApp'
+name: 'Workflow Status Notifier'
+description: 'Sends Telegram notifications for workflow successes and failures'
 author: 'HHH'
-
-branding:
-  icon: 'bell'
-  color: 'green'
-  
 inputs:
   telegram_bot_token:
     description: 'Telegram bot token'
-    required: false
+    required: true
   telegram_chat_id:
     description: 'Telegram chat ID'
-    required: false
-
-  slack_webhook:
-    description: 'Slack webhook URL'
-    required: false
-  slack_channel:
-    description: 'Slack channel to notify'
-    required: false
-  
-  email_to:
-    description: 'Email address to send to (comma-separated)'
-    required: false
-  email_subject:
-    description: 'Email subject'
-    required: false
-    default: 'GitHub Notification'
-  
-  whatsapp_api_key:
-    description: 'WhatsApp API key (for Twilio or other provider)'
-    required: false
-  whatsapp_to:
-    description: 'WhatsApp number to message (+1234567890)'
-    required: false
-
-  message:
-    description: 'The notification message to send'
     required: true
-  github_token:
-    description: 'GitHub token for commit status updates'
+  monitored_workflows:
+    description: 'Comma-separated list of workflows to monitor'
     required: false
-    default: ${{ github.token }}
+    default: ''
 runs:
-  using: "composite"
-  steps:
-    - name: Telegram Notification
-      if: ${{ inputs.telegram_bot_token != '' && inputs.telegram_chat_id != '' }}
-      uses: appleboy/telegram-action@v1.0.1
-      with:
-        to: ${{ inputs.telegram_chat_id }}
-        token: ${{ inputs.telegram_bot_token }}
-        message: ${{ inputs.message }}
+  using: 'node20'
+  main: 'dist/index.js'
+branding:
+  icon: 'bell'
+  color: 'blue'
+
+# name: 'Multi-Channel Notifications'
+# description: 'Send notifications to Slack, Email, Telegram, and WhatsApp'
+# author: 'HHH'
+
+# branding:
+#   icon: 'bell'
+#   color: 'green'
+  
+# inputs:
+#   telegram_bot_token:
+#     description: 'Telegram bot token'
+#     required: false
+#   telegram_chat_id:
+#     description: 'Telegram chat ID'
+#     required: false
+
+#   slack_webhook:
+#     description: 'Slack webhook URL'
+#     required: false
+#   slack_channel:
+#     description: 'Slack channel to notify'
+#     required: false
+  
+#   email_to:
+#     description: 'Email address to send to (comma-separated)'
+#     required: false
+#   email_subject:
+#     description: 'Email subject'
+#     required: false
+#     default: 'GitHub Notification'
+  
+#   whatsapp_api_key:
+#     description: 'WhatsApp API key (for Twilio or other provider)'
+#     required: false
+#   whatsapp_to:
+#     description: 'WhatsApp number to message (+1234567890)'
+#     required: false
+
+#   message:
+#     description: 'The notification message to send'
+#     required: true
+#   github_token:
+#     description: 'GitHub token for commit status updates'
+#     required: false
+#     default: ${{ github.token }}
+# runs:
+#   using: "composite"
+#   steps:
+#     - name: Telegram Notification
+#       if: ${{ inputs.telegram_bot_token != '' && inputs.telegram_chat_id != '' }}
+#       uses: appleboy/telegram-action@v1.0.1
+#       with:
+#         to: ${{ inputs.telegram_chat_id }}
+#         token: ${{ inputs.telegram_bot_token }}
+#         message: ${{ inputs.message }}
       
-    # - name: Slack Notification
-    #   if: ${{ inputs.slack_webhook != '' }}
-    #   uses: slackapi/slack-github-action@v1.23.0
-    #   with:
-    #     slack-message: ${{ inputs.message }}
-    #     slack-webhook-url: ${{ inputs.slack_webhook }}
-    #     channel: ${{ inputs.slack_channel }}
+#     # - name: Slack Notification
+#     #   if: ${{ inputs.slack_webhook != '' }}
+#     #   uses: slackapi/slack-github-action@v1.23.0
+#     #   with:
+#     #     slack-message: ${{ inputs.message }}
+#     #     slack-webhook-url: ${{ inputs.slack_webhook }}
+#     #     channel: ${{ inputs.slack_channel }}
     
-    # - name: Email Notification
-    #   if: ${{ inputs.email_to != '' }}
-    #   uses: dawidd6/action-send-mail@v3
-    #   with:
-    #     server_address: smtp.gmail.com
-    #     server_port: 465
-    #     username: ${{ secrets.EMAIL_USERNAME }}
-    #     password: ${{ secrets.EMAIL_PASSWORD }}
-    #     subject: ${{ inputs.email_subject }}
-    #     body: ${{ inputs.message }}
-    #     to: ${{ inputs.email_to }}
-    #     from: GitHub Actions
+#     # - name: Email Notification
+#     #   if: ${{ inputs.email_to != '' }}
+#     #   uses: dawidd6/action-send-mail@v3
+#     #   with:
+#     #     server_address: smtp.gmail.com
+#     #     server_port: 465
+#     #     username: ${{ secrets.EMAIL_USERNAME }}
+#     #     password: ${{ secrets.EMAIL_PASSWORD }}
+#     #     subject: ${{ inputs.email_subject }}
+#     #     body: ${{ inputs.message }}
+#     #     to: ${{ inputs.email_to }}
+#     #     from: GitHub Actions
         
     
