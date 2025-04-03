@@ -12,6 +12,10 @@ inputs:
     description: 'Comma-separated list of workflows to monitor'
     required: false
     default: ''
+  github_token:
+    description: 'GitHub token for commit status updates'
+    required: false
+    default: ${{ github.token }}
 runs:
   using: 'node20'
   main: 'dist/index.js'
