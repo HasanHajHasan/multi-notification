@@ -72,7 +72,8 @@ Triggered by: 👤 ${workflowRun.actor?.login || 'N/A'}
 View Logs: 🔗 ${workflowRun.html_url}
       `;
     }
-
+    core.info(`Message: ${message}`);
+    core.info(`https://api.telegram.org/bot${token}/sendMessage`)
     // Send Telegram message
     await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
       chat_id: chatId,

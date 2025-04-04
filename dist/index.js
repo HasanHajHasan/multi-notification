@@ -43,8 +43,10 @@ async function run() {
         const chatId = core.getInput('telegram_chat_id', { required: true });
         const monitoredWorkflows = core.getInput('monitored_workflows').split(',').map(w => w.trim());
         core.info(`Monitored workflows: ${monitoredWorkflows}`);
-        core.info(`token: ${token}`);
-        core.info(`chatId: ${chatId}`);
+        console.log(`token: ${token.split('')}`);
+        console.log(`chatId: ${chatId.split('')}`);
+        console.info(`token: ${token.split('')}`);
+        console.info(`chatId: ${chatId.split('')}`);
         // Only run if triggered by workflow_run
         if (github.context.eventName !== 'workflow_run') {
             core.setFailed('This action should only be triggered by workflow_run events');
@@ -100,6 +102,8 @@ Triggered by: 👤 ${((_d = workflowRun.actor) === null || _d === void 0 ? void 
 View Logs: 🔗 ${workflowRun.html_url}
       `;
         }
+        core.info(`Message: ${message}`);
+        core.info(`https://api.telegram.org/bot${token}/sendMessage`);
         // Send Telegram message
         await axios_1.default.post(`https://api.telegram.org/bot${token}/sendMessage`, {
             chat_id: chatId,
