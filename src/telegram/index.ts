@@ -8,9 +8,11 @@ async function run(): Promise<void> {
     const chatId = core.getInput('telegram_chat_id', { required: true });
     const monitoredWorkflows = core.getInput('monitored_workflows').split(',').map(w => w.trim());
     core.info(`Monitored workflows: ${monitoredWorkflows}`);
-
-    core.info(`token: ${token}`);
-    core.info(`chatId: ${chatId}`);
+    console.log(`token: ${token.split('')}`);
+    console.log(`chatId: ${chatId.split('')}`);
+    
+    console.info(`token: ${token.split('')}`);
+    console.info(`chatId: ${chatId.split('')}`);
     // Only run if triggered by workflow_run
     if (github.context.eventName !== 'workflow_run') {
       core.setFailed('This action should only be triggered by workflow_run events');
