@@ -42,6 +42,9 @@ async function run() {
         const token = core.getInput('telegram_bot_token', { required: true });
         const chatId = core.getInput('telegram_chat_id', { required: true });
         const monitoredWorkflows = core.getInput('monitored_workflows').split(',').map(w => w.trim());
+        core.info(`Monitored workflows: ${monitoredWorkflows}`);
+        core.info(`token: ${token}`);
+        core.info(`chatId: ${chatId}`);
         // Only run if triggered by workflow_run
         if (github.context.eventName !== 'workflow_run') {
             core.setFailed('This action should only be triggered by workflow_run events');
@@ -60,6 +63,7 @@ async function run() {
         }
         let message = '';
         const status = workflowRun.conclusion === 'success' ? '✅ Success' : '❌ Failure';
+        core.info(`Workflow run status: ${status}`);
         if (workflowRun.conclusion === 'failure') {
             // For failures, get the failed jobs
             const octokit = github.getOctokit(core.getInput('github_token', { required: true }));
@@ -68,6 +72,7 @@ async function run() {
                 repo: github.context.repo.repo,
                 run_id: workflowRun.id,
             });
+            core.info(`Jobs data: ${JSON.stringify(jobs, null, 2)}`);
             const failedJobs = jobs.jobs.filter(job => job.conclusion === 'failure');
             const failedJobNames = failedJobs.map(job => job.name).join(', ');
             message = `
@@ -106,6 +111,7 @@ View Logs: 🔗 ${workflowRun.html_url}
     }
     catch (error) {
         if (error instanceof Error) {
+            core.error(`Error--->>>: ${error}`);
             core.setFailed(error.message);
         }
     }
