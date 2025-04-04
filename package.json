@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-tsc": "tsc && ncc build lib/index.js",
+    "build-tsc": "tsc && ncc build lib/telegram/index.js",
     "build": "ncc build src/telegram/index.ts -o dist --minify"
   },
   "keywords": [],

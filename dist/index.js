@@ -1,7 +1,7 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 6458:
+/***/ 1788:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -42,14 +42,9 @@ async function run() {
         const token = core.getInput('telegram_bot_token', { required: true });
         const chatId = core.getInput('telegram_chat_id', { required: true });
         const monitoredWorkflows = core.getInput('monitored_workflows').split(',').map(w => w.trim());
-        core.info(`Monitored workflows: ${monitoredWorkflows}`);
-        console.log(`token: ${token.split('')}`);
-        console.log(`chatId: ${chatId.split('')}`);
-        console.info(`token: ${token.split('')}`);
-        console.info(`chatId: ${chatId.split('')}`);
         // Only run if triggered by workflow_run
         if (github.context.eventName !== 'workflow_run') {
-            core.setFailed('This action should only be triggered by workflow_run events');
+            core.setFailed('This action should only be triggered by workflow_run events.');
             return;
         }
         const workflowRun = github.context.payload.workflow_run;
@@ -65,7 +60,6 @@ async function run() {
         }
         let message = '';
         const status = workflowRun.conclusion === 'success' ? '✅ Success' : '❌ Failure';
-        core.info(`Workflow run status: ${status}`);
         if (workflowRun.conclusion === 'failure') {
             // For failures, get the failed jobs
             const octokit = github.getOctokit(core.getInput('github_token', { required: true }));
@@ -74,7 +68,6 @@ async function run() {
                 repo: github.context.repo.repo,
                 run_id: workflowRun.id,
             });
-            core.info(`Jobs data: ${JSON.stringify(jobs, null, 2)}`);
             const failedJobs = jobs.jobs.filter(job => job.conclusion === 'failure');
             const failedJobNames = failedJobs.map(job => job.name).join(', ');
             message = `
@@ -102,8 +95,6 @@ Triggered by: 👤 ${((_d = workflowRun.actor) === null || _d === void 0 ? void 
 View Logs: 🔗 ${workflowRun.html_url}
       `;
         }
-        core.info(`Message: ${message}`);
-        core.info(`https://api.telegram.org/bot${token}/sendMessage`);
         // Send Telegram message
         await axios_1.default.post(`https://api.telegram.org/bot${token}/sendMessage`, {
             chat_id: chatId,
@@ -115,7 +106,6 @@ View Logs: 🔗 ${workflowRun.html_url}
     }
     catch (error) {
         if (error instanceof Error) {
-            core.error(`Error--->>>: ${error}`);
             core.setFailed(error.message);
         }
     }
@@ -7937,7 +7927,7 @@ module.exports = Function.prototype.call;
 
 
 var bind = __nccwpck_require__(5632);
-var $TypeError = __nccwpck_require__(4077);
+var $TypeError = __nccwpck_require__(6458);
 
 var $call = __nccwpck_require__(4715);
 var $actualApply = __nccwpck_require__(429);
@@ -8442,7 +8432,7 @@ module.exports = SyntaxError;
 
 /***/ }),
 
-/***/ 4077:
+/***/ 6458:
 /***/ ((module) => {
 
 "use strict";
@@ -8490,7 +8480,7 @@ var $defineProperty = GetIntrinsic('%Object.defineProperty%', true);
 
 var hasToStringTag = __nccwpck_require__(5005)();
 var hasOwn = __nccwpck_require__(2618);
-var $TypeError = __nccwpck_require__(4077);
+var $TypeError = __nccwpck_require__(6458);
 
 var toStringTag = hasToStringTag ? Symbol.toStringTag : null;
 
@@ -9883,7 +9873,7 @@ var $EvalError = __nccwpck_require__(9224);
 var $RangeError = __nccwpck_require__(4433);
 var $ReferenceError = __nccwpck_require__(7409);
 var $SyntaxError = __nccwpck_require__(1681);
-var $TypeError = __nccwpck_require__(4077);
+var $TypeError = __nccwpck_require__(6458);
 var $URIError = __nccwpck_require__(1866);
 
 var abs = __nccwpck_require__(4328);
@@ -40160,7 +40150,7 @@ module.exports = /*#__PURE__*/JSON.parse('{"application/1d-interleaved-parityfec
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(6458);
+/******/ 	var __webpack_exports__ = __nccwpck_require__(1788);
 /******/ 	module.exports = __webpack_exports__;
 /******/ 	
 /******/ })()

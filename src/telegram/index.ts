@@ -7,15 +7,10 @@ async function run(): Promise<void> {
     const token = core.getInput('telegram_bot_token', { required: true });
     const chatId = core.getInput('telegram_chat_id', { required: true });
     const monitoredWorkflows = core.getInput('monitored_workflows').split(',').map(w => w.trim());
-    core.info(`Monitored workflows: ${monitoredWorkflows}`);
-    console.log(`token: ${token.split('')}`);
-    console.log(`chatId: ${chatId.split('')}`);
     
-    console.info(`token: ${token.split('')}`);
-    console.info(`chatId: ${chatId.split('')}`);
     // Only run if triggered by workflow_run
     if (github.context.eventName !== 'workflow_run') {
-      core.setFailed('This action should only be triggered by workflow_run events');
+      core.setFailed('This action should only be triggered by workflow_run events.');
       return;
     }
 
@@ -34,7 +29,7 @@ async function run(): Promise<void> {
 
     let message = '';
     const status = workflowRun.conclusion === 'success' ? '✅ Success' : '❌ Failure';
-    core.info(`Workflow run status: ${status}`);
+
     if (workflowRun.conclusion === 'failure') {
       // For failures, get the failed jobs
       const octokit = github.getOctokit(core.getInput('github_token', { required: true }));
@@ -44,7 +39,6 @@ async function run(): Promise<void> {
         repo: github.context.repo.repo,
         run_id: workflowRun.id,
       });
-      core.info(`Jobs data: ${JSON.stringify(jobs, null, 2)}`);
       const failedJobs = jobs.jobs.filter(job => job.conclusion === 'failure');
       const failedJobNames = failedJobs.map(job => job.name).join(', ');
 
@@ -72,8 +66,6 @@ Triggered by: 👤 ${workflowRun.actor?.login || 'N/A'}
 View Logs: 🔗 ${workflowRun.html_url}
       `;
     }
-    core.info(`Message: ${message}`);
-    core.info(`https://api.telegram.org/bot${token}/sendMessage`)
     // Send Telegram message
     await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
       chat_id: chatId,
@@ -85,7 +77,6 @@ View Logs: 🔗 ${workflowRun.html_url}
     core.info('Notification sent successfully');
   } catch (error) {
     if (error instanceof Error) {
-      core.error(`Error--->>>: ${error}`);
       core.setFailed(error.message);
     }
   }
